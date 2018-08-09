@@ -3,34 +3,45 @@ import logo from './logo.svg';
 import './App.css';
 import todoList from './todos.json';
 
-const TodoItem = props => (
+const ToDoItem = props => (
   
-  
-  <li className='completed'>
+  <li className={props.completed}>
      <div className='view'>
-        <input className='toggle' type='checkbox' checked/>
-        <label>Taste JavaScript</label>
+        <input className='toggle' type='checkbox' />
+        <label>{props.item}</label>
         <button className='destroy'></button>
      </div>
   </li>
-  // if completed insert a classname, otherwise dont
 );
 
+const ToDoList = props => (
+  <section className='main'>
+    <ul className='todo-list'>
+    {props.children}
+    <ToDoItem completed="completed" item="Taste Javascript" />
+    <ToDoItem item="Buy a unicorn" />
+    </ul>
+  </section>
+);
 
 
 class App extends Component {
   render() {
     return (
-    <section className='todoapp'>
+      <section className='todoapp'>
       <header className='header'>
         <h1>todos</h1>
-        <input className='new-todo' placeholder='What needs to be done?' autofocus/>
+        <input className='new-todo' placeholder='What needs to be done?' autoFocus/>
       </header>
-      <section className='main'>
+      <ToDoList>
+        {/* <ToDoItem completed="completed" item="Taste Javascript" />
+        <ToDoItem item="Buy a unicorn" /> */}
+      </ToDoList>
+      {/* <section className='main'>
         <ul className='todo-list'>
           <li className='completed'>
             <div className='view'>
-              <input className='toggle' type='checkbox' checked/>
+              <input className='toggle' type='checkbox' />
               <label>Taste JavaScript</label>
               <button className='destroy'></button>
             </div>
@@ -43,7 +54,7 @@ class App extends Component {
             </div>
           </li>
         </ul>
-      </section>
+      </section> */}
       <footer className='footer'>
         <span className='todo-count'><strong>0</strong> item(s) left</span>
         <button className='clear-completed'>Clear completed</button>
