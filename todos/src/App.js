@@ -4,7 +4,6 @@ import './App.css';
 import todoList from './todos.json';
 
 const ToDoItem = props => (
-  
   <li className={props.completed}>
      <div className='view'>
         <input className='toggle' type='checkbox' />
@@ -14,15 +13,24 @@ const ToDoItem = props => (
   </li>
 );
 
-const ToDoList = props => (
-  <section className='main'>
-    <ul className='todo-list'>
-    {props.children}
-    <ToDoItem completed="completed" item="Taste Javascript" />
-    <ToDoItem item="Buy a unicorn" />
-    </ul>
-  </section>
-);
+class ToDoList extends Component {
+  constructor(props) {
+    super(props);
+    this.state= {
+      todos: todoList,
+    }
+  }
+  render(){
+    return  (
+    <section className='main'>
+      <ul className='todo-list'>
+      {this.state.todos.map( todo => <ToDoItem completed={todo.completed} item={todo.title} /> )}
+      </ul>
+    </section>
+    )
+  }
+}
+
 
 
 class App extends Component {
@@ -34,27 +42,7 @@ class App extends Component {
         <input className='new-todo' placeholder='What needs to be done?' autoFocus/>
       </header>
       <ToDoList>
-        {/* <ToDoItem completed="completed" item="Taste Javascript" />
-        <ToDoItem item="Buy a unicorn" /> */}
       </ToDoList>
-      {/* <section className='main'>
-        <ul className='todo-list'>
-          <li className='completed'>
-            <div className='view'>
-              <input className='toggle' type='checkbox' />
-              <label>Taste JavaScript</label>
-              <button className='destroy'></button>
-            </div>
-          </li>
-          <li>
-            <div className='view'>
-              <input className='toggle' type='checkbox'/>
-              <label>Buy a unicorn</label>
-              <button className='destroy'></button>
-            </div>
-          </li>
-        </ul>
-      </section> */}
       <footer className='footer'>
         <span className='todo-count'><strong>0</strong> item(s) left</span>
         <button className='clear-completed'>Clear completed</button>
