@@ -6,7 +6,7 @@ import todoList from './todos.json';
 const ToDoItem = props => (
   <li className={props.completed}>
      <div className='view'>
-        <input className='toggle' type='checkbox' />
+        <input className='toggle' type='checkbox' checked={props.completed}/>
         <label>{props.item}</label>
         <button className='destroy'></button>
      </div>
