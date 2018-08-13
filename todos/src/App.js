@@ -4,7 +4,7 @@ import './App.css';
 import todoList from './todos.json';
 
 const ToDoItem = props => (
-  <li className={props.completed}>
+  <li className={props.completed ? 'completed' : ''}>
      <div className='view'>
         <input className='toggle' type='checkbox' checked={props.completed}/>
         <label>{props.item}</label>
