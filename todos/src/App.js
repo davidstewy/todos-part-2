@@ -1,14 +1,18 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import todoList from "./todos.json";
 
 const ToDoItem = props => (
   <li className={props.completed ? "completed" : ""}>
     <div className="view">
-      <input className="toggle" type="checkbox" checked={props.completed} />
-      <label>{props.item}</label>
-      <button className="destroy" />
+      <input
+        className="toggle"
+        onClick={props.onClick}
+        type="checkbox"
+        checked={props.completed}
+      />
+      <label>{props.title}</label>
+      <button className="destroy" onClick={props.deleteTodo} />
     </div>
   </li>
 );
@@ -19,6 +23,7 @@ class ToDoList extends Component {
   //   this.state= {
   //     todos: todoList,
   //   }
+  // this.handleKeypress = this.handleKeypress.bind(this)
   // }
   state = {
     todos: todoList,
@@ -28,7 +33,7 @@ class ToDoList extends Component {
   handleKeypress = event => {
     if (event.key === "Enter") {
       const title = event.target.value;
-      event.target.value = '';
+      event.target.value = "";
       let newTodo = {
         userId: 1,
         id: this.state.todoCount,
@@ -42,6 +47,49 @@ class ToDoList extends Component {
         todoCount: this.state.todoCount + 1
       });
     }
+  };
+
+  handleCompleted = id => event => {
+    //   search thru this.state.todos List
+    const { todos } = this.state;
+
+    this.setState({
+      todos: todos.map(
+        todo =>
+          todo.id === id
+            ? {
+                ...todo,
+                completed: !todo.completed
+              }
+            : todo
+      )
+    });
+  };
+
+  handleDeleteTodo = id => event => {
+    const { todos } = this.state;
+    this.setState({
+      todos: todos.filter(todo => {
+        if (todo.id === id) {
+          return false;
+        } else {
+          return true;
+        }
+      })
+    });
+  };
+
+  handleDeletingAllTodos = event => {
+    const { todos } = this.state;
+    this.setState({
+      todos: todos.filter(todo => {
+        if (todo.completed === true) {
+          return false;
+        } else {
+          return true;
+        }
+      })
+    });
   };
 
   render() {
@@ -59,10 +107,21 @@ class ToDoList extends Component {
         <section className="main">
           <ul className="todo-list">
             {this.state.todos.map(todo => (
-              <ToDoItem completed={todo.completed} item={todo.title} />
+              <ToDoItem
+                completed={todo.completed}
+                onClick={this.handleCompleted(todo.id)}
+                title={todo.title}
+                deleteTodo={this.handleDeleteTodo(todo.id)}
+              />
             ))}
           </ul>
         </section>
+        <footer className="footer">
+          <span className="todo-count">
+            <strong>0</strong> item(s) left
+          </span>
+          <button className="clear-completed" onClick={this.handleDeletingAllTodos}>Clear completed</button>
+        </footer>
       </React.Fragment>
     );
   }
@@ -72,19 +131,10 @@ class App extends Component {
   render() {
     return (
       <section className="todoapp">
-        <ToDoList />
-        <footer className="footer">
-          <span className="todo-count">
-            <strong>0</strong> item(s) left
-          </span>
-          <button className="clear-completed">Clear completed</button>
-        </footer>
+        <ToDoList handleCompleted={this.handleCompleted} />
       </section>
     );
   }
 }
 
 export default App;
-
-
-
